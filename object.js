@@ -10,10 +10,13 @@ module.exports = {
 			return false;
 		}
 	},
+	
 	bindLate: (obj, fn) => function() {
 		return obj[fn].apply(obj, arguments);
 	},
+	
 	unset: (obj, keys) => keys.forEach(k => delete obj[k]),
+	
 	className: obj => {
 		if(typeof obj === 'undefined') return 'undefined';
 		if(obj === null) return 'null';
@@ -49,5 +52,28 @@ module.exports = {
 				data[key] = this[key];
 		});
 		return data;
+	},
+	
+	pick_values: (obj, keys) => keys.reduce((res, key) => res.concat(obj[key]), []),
+	
+	objectUnassign: (obj, keys, original) => {
+		let res = original ? obj : JSON.parse(JSON.stringify(obj))
+		if(keys.constructor !== Array) keys = [keys]
+		for(let k of keys) {
+			delete res[k]
+		}
+		return res
+	},
+	
+	clone: obj => JSON.parse(JSON.stringify(obj)),
+
+	splice: (obj, keys) => {
+		let res = {}
+		for(let k of keys) {
+			res[k] = obj[k]
+			delete obj[k]
+		}
+
+		return res
 	}
 };
